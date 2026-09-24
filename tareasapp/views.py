@@ -26,3 +26,25 @@ def crear_tarea(request):
         )
         return redirect('inicio')
     return render(request, 'tareasapp/crear.html')
+
+def detalle_tarea(request, id):
+    tareas = Tarea.objects.get(id=id)
+
+    return render(request, 'tareasapp/detalles.html',{
+        'tarea' : tareas
+    })
+
+def editar_tarea(request, id):
+    edicion= Tarea.objects.get(id=id)
+
+    if request.method == 'POST':
+        edicion.titulo = request.POST['titulo']
+        edicion.descripcion = request.POST['descripcion']
+        edicion.completada = 'completada' in request.POST
+
+        edicion.save()
+        return redirect('inicio')
+    
+    return render(request, 'tareasapp/editar.html',{
+        'tarea' : edicion
+    })
